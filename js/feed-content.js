@@ -2,49 +2,49 @@ const places = [
 	{
 		id: "bozhyra",
 		name: "Bozhyra (Boszhira)",
-		image: "./public/bozhyra.png",
+		image: "/mangistau-map/public/bozhyra.png",
 		url: "https://maps.app.goo.gl/vK8ayGY1HAe3dr7x8"
 	},
 	{
 		id: "tuzbair",
 		name: "Tuzbair Salt Flat",
-		image: "./public/tuzbair.png",
+		image: "/mangistau-map/public/tuzbair.png",
 		url: "https://maps.app.goo.gl/gEnghG44DjZy5VLV6"
 	},
 	{
 		id: "airakty-zhygylan",
 		name: "Airakty Zhygylan",
-		image: "./public/airaqty.png",
+		image: "/mangistau-map/public/airaqty.png",
 		url: "https://maps.app.goo.gl/HFBT2jpUkMqz45Fg7"
 	},
 	{
 		id: "karakiya",
 		name: "Karakiya Depression",
-		image: "./public/kakakia.png",
+		image: "/mangistau-map/public/kakakia.png",
 		url: "https://maps.app.goo.gl/755FmBsDUGXpvta88" // fix
 	},
 	{
 		id: "sherkala",
 		name: "Sherkala Mountain",
-		image: "./public/sherkala.png",
+		image: "/mangistau-map/public/sherkala.png",
 		url: "https://maps.app.goo.gl/aFaa1xhpM76TA6V28"
 	},
 	{
 		id: "otpan-tau",
 		name: "Otpan Tau",
-		image: "./public/otpan-tau.png",
+		image: "/mangistau-map/public/otpan-tau.png",
 		url: "https://maps.app.goo.gl/p3hM9VnxQPNgRJvz6"
 	},
 	{
 		id: "karamsay",
 		name: "Karamsay Canyon",
-		image: "./public/karamsay.png",
+		image: "/mangistau-map/public/karamsay.png",
 		url: "https://maps.app.goo.gl/8r11Qmsqe3CoB7wV8"
 	},
 	{
 		id: "torysh",
 		name: "Torysh – Valley of Balls",
-		image: "./public/torysh.png",
+		image: "/mangistau-map/public/torysh.png",
 		url: "https://maps.app.goo.gl/V64ZhgEakmYtRBe69"
 	}
 ]
