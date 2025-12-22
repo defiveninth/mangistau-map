@@ -65,7 +65,7 @@ const places = [
     name: "Түпқараған түбегі",
     description: "Каспий теңізіне созылған алыс түбек, мұнда шөл драмалық жағалық пейзажда су кездеседі.",
     image: "/mangistau-map/public/tupkaragan.png",
-    url: "https://maps.app.goo.gl/rZFV8b6NqxYpYzSr7",
+    url: "https://maps.app.goo.gl/6xZG2CqV9W3JPiJ97",
   },
 ]
 
