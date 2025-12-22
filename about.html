@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Мангистау</title>
+	<style>
+		body {
+			margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+			background: #ffffff;
+			color: #111;
+			line-height: 1.6;
+		}
+
+		header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 64px;
+			z-index: 1000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		nav {
+			display: flex;
+			gap: 32px;
+		}
+
+		nav a {
+			color: #000;
+			text-decoration: none;
+			font-size: 15px;
+			font-weight: 600;
+			opacity: 0.9;
+			transition: opacity 0.2s ease;
+		}
+
+		nav a:hover {
+			opacity: 1;
+		}
+
+		.selected {
+			border-bottom: solid 1px black;
+		}
+
+		section {
+			max-width: 800px;
+			margin: 40px auto;
+			padding: 0 20px;
+		}
+
+		h2 {
+			font-size: 26px;
+			margin-bottom: 10px;
+		}
+
+		p {
+			font-size: 16px;
+			margin-bottom: 16px;
+		}
+
+		footer {
+			max-width: 800px;
+			margin: 40px auto;
+			padding: 20px;
+			font-size: 14px;
+			color: #666;
+			border-top: 1px solid #ddd;
+		}
+	</style>
+</head>
+
+<body>
+
+	<header>
+		<nav>
+			<a href="index.html">Дома</a>
+			<a href="map.html">Карта</a>
+			<a href="about.html" class='selected'>Про Мангистау</a>
+		</nav>
+	</header>
+
+	<section>
+		<h2>О регионе</h2>
+		<p>
+			Мангистауская область — уникальный регион на западе Казахстана.
+			Здесь нет привычных пейзажей, но есть ощущение другой планеты:
+			меловые плато, каньоны и бескрайние горизонты.
+		</p>
+	</section>
+
+	<section>
+		<h2>Природа</h2>
+		<p>
+			Главная ценность Мангистау — его ландшафты.
+			Бозжыра, Тузбаир и Шеркала выглядят минималистично,
+			сурово и одновременно величественно.
+		</p>
+	</section>
+
+	<section>
+		<h2>Смысл</h2>
+		<p>
+			Мангистау — место для тишины и размышлений.
+			Сюда приезжают не за развлечениями,
+			а за ощущением пространства и внутреннего покоя.
+		</p>
+	</section>
+
+</body>
+
+</html>

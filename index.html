@@ -2,342 +2,141 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Mangistau Parks Map</title>
+  <meta charset="UTF-8" />
+  <title>Mangistau Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<style>
-		html,
-		body {
-			margin: 0;
-			height: 100%;
-			overflow: hidden;
-			font-family: Arial, sans-serif;
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    body {
+      overflow-y: scroll;
+      height: 100vh;
+      background: #000;
+      scroll-snap-type: y mandatory;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      /* 🔥 body does NOT scroll */
+      background: #000;
+    }
+
+    .feed {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 32px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+
+    nav a:hover {
+      opacity: 1;
+    }
+
+    .selected {
+			border-bottom: solid 1px white;
 		}
 
-		body {
-			display: flex;
-		}
+    .slide {
+      height: 100vh;
+      width: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+    }
 
-		/* Sidebar */
-		.sidebar {
-			width: 300px;
-			background: #f4f4f4;
-			padding: 20px;
-			box-sizing: border-box;
-			overflow-y: auto;
-		}
+    .overlay {
+      width: 100%;
+      padding: 32px 24px;
+      background: linear-gradient(to top,
+          rgba(0, 0, 0, 0.65),
+          rgba(0, 0, 0, 0.2),
+          transparent);
+    }
 
-		.sidebar h2 {
-			margin-top: 0;
-		}
+    .title {
+      color: #fff;
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
 
-		.park-item {
-			padding: 10px;
-			cursor: pointer;
-			border-bottom: 1px solid #ddd;
-		}
+    .explore-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #000;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-		.park-item:hover {
-			background: #e6e6e6;
-		}
-
-		.park-item.active {
-			background: #cfe4ff;
-			font-weight: bold;
-		}
-
-		.explore-btn {
-			margin-top: 20px;
-			width: 100%;
-			padding: 12px;
-			font-size: 16px;
-			background: #000;
-			color: white;
-			border: none;
-			cursor: pointer;
-			opacity: 0.5;
-		}
-
-		.explore-btn.enabled {
-			opacity: 1;
-		}
-
-		/* Map */
-		.map-wrapper {
-			flex: 1;
-			background: black;
-			position: relative;
-			overflow: hidden;
-			background-image: url(https://i.pinimg.com/736x/84/c3/91/84c3913405118acb661f5453d870ab11.jpg);
-		}
-
-		.map {
-			position: absolute;
-			inset: 0;
-			width: max(100vw, 100vh);
-			height: max(100vw, 100vh);
-			aspect-ratio: 1 / 1;
-			transform-origin: 0 0;
-			cursor: grab;
-			opacity: 0.95;
-			
-		}
-
-		.map img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			pointer-events: none;
-			user-select: none;
-		}
-
-		/* Markers */
-		.marker {
-			position: absolute;
-			width: 14px;
-			height: 14px;
-			border-radius: 50%;
-			transform: translate(-50%, -50%);
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			color: white;
-			font-size: 10px;
-		}
-
-		.marker.blue {
-			background: blue;
-		}
-
-		.marker.red {
-			background: red;
-		}
-
-		/* Zoom controls */
-		.zoom-controls {
-			position: absolute;
-			right: 20px;
-			bottom: 20px;
-			display: flex;
-			flex-direction: column;
-			gap: 8px;
-			z-index: 10;
-		}
-
-		.zoom-controls button {
-			width: 42px;
-			height: 42px;
-			font-size: 20px;
-			font-weight: bold;
-			background: white;
-			border: 1px solid #ccc;
-			cursor: pointer;
-			border-radius: 6px;
-		}
-
-		.zoom-controls button:hover {
-			background: #f0f0f0;
-		}
-	</style>
+    .explore-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+  </style>
 </head>
 
 <body>
 
-	<!-- Sidebar -->
-	<div class="sidebar">
-		<h2>Интересные локаций</h2>
-		<div id="parkList"></div>
-		<button id="exploreBtn" class="explore-btn" disabled>Осматривать</button>
-	</div>
+  <!-- Floating Header -->
+  <header>
+    <nav>
+      <a href="index.html" class='selected'>Дома</a>
+      <a href="map.html">Карта</a>
+      <a href="about.html">Про Мангистау</a>
+    </nav>
+  </header>
 
-	<!-- Map -->
-	<div class="map-wrapper" id="mapWrapper">
-		<div class="map" id="map">
-			<img src="map.png" alt="Mangistau Map">
-			<div id="markers"></div>
-		</div>
+  <!-- Feed -->
+  <div id="feed" class="feed"></div>
 
-		<div class="zoom-controls">
-			<button id="zoomIn">+</button>
-			<button id="zoomOut">−</button>
-			<button id="resetView" title="Reset view">⟳</button>
-		</div>
-	</div>
-
-	<script>
-		/* ================= DATA ================= */
-		const parks = [
-			{ name: "Акбота Парк", x: 24, y: 60, link: "https://maps.app.goo.gl/dEtzuSZfk4yh6Gov9" },
-			{ name: "Rixos Water World Aktau", x: 24, y: 60, link: "https://maps.app.goo.gl/xCEZB2MawwKLDs377" },
-			{ name: "Мұнайшылар саябағы", x: 42, y: 63, link: "https://maps.app.goo.gl/4qc4UhuRhtVSzBXQ9" },
-			{ name: "Бесінбай қорымы", x: 17, y: 44, link: "https://maps.app.goo.gl/Q5gn33Xdid8ynS7n8" },
-			{ name: "Beket-Ata mosque", x: 72, y: 30, link: "https://maps.app.goo.gl/sYSw35sosBKbQCBt6" },
-			{ name: "Тамшалы. Спуск по лестнице.", x: 22, y: 40, link: "https://maps.app.goo.gl/MuBqcg4zmPaBhB3n8" },
-		]
-
-		/* ================= ELEMENTS ================= */
-		const parkList = document.getElementById("parkList")
-		const markersContainer = document.getElementById("markers")
-		const exploreBtn = document.getElementById("exploreBtn")
-		const map = document.getElementById("map")
-		const wrapper = document.getElementById("mapWrapper")
-
-		/* ================= STATE ================= */
-		let selectedPark = null
-		let scale = 1
-		let x = 0
-		let y = 0
-
-		/* ================= HELPERS ================= */
-		function clampPosition() {
-			const w = wrapper.getBoundingClientRect()
-			const mapW = map.offsetWidth * scale
-			const mapH = map.offsetHeight * scale
-
-			const minX = Math.min(0, w.width - mapW)
-			const minY = Math.min(0, w.height - mapH)
-
-			x = Math.max(minX, Math.min(0, x))
-			y = Math.max(minY, Math.min(0, y))
-		}
-
-		function applyTransform() {
-			clampPosition()
-			map.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
-		}
-
-		/* ================= PARK SELECTION ================= */
-		function selectPark(park) {
-			selectedPark = park
-
-			document.querySelectorAll(".park-item").forEach(item =>
-				item.classList.toggle("active", item.dataset.name === park.name)
-			)
-
-			// Highlight all markers with the same coordinates as the selected park
-			document.querySelectorAll(".marker").forEach(marker => {
-				if (marker.dataset.coord === `${park.x}-${park.y}` && marker.dataset.name === park.name) {
-					marker.classList.remove("blue")
-					marker.classList.add("red")
-				} else {
-					marker.classList.remove("red")
-					marker.classList.add("blue")
-				}
-			})
-
-			exploreBtn.disabled = false
-			exploreBtn.classList.add("enabled")
-		}
-
-		/* ================= CREATE UI ================= */
-		// Count duplicates to offset overlapping markers
-		const coordCounts = {}
-
-		parks.forEach((park, index) => {
-			const key = `${park.x}-${park.y}`
-			if (!coordCounts[key]) coordCounts[key] = 0
-			const offsetIndex = coordCounts[key]++
-
-			// Sidebar
-			const item = document.createElement("div")
-			item.className = "park-item"
-			item.textContent = park.name
-			item.dataset.name = park.name
-			item.onclick = () => selectPark(park)
-			parkList.appendChild(item)
-
-			// Marker
-			const marker = document.createElement("div")
-			marker.className = "marker blue"
-			marker.dataset.name = park.name
-			marker.dataset.coord = key
-
-			// Slight offset for overlapping markers
-			const offset = offsetIndex * 18 // 18px spacing
-			marker.style.left = `calc(${park.x}% + ${offset}px)`
-			marker.style.top = `calc(${park.y}% + ${offset}px)`
-
-			marker.onclick = () => selectPark(park)
-			markersContainer.appendChild(marker)
-		})
-
-		/* ================= NAVIGATION ================= */
-		exploreBtn.onclick = () => {
-			if (!selectedPark) return
-			location.href = selectedPark.link
-		}
-
-		/* ================= PAN ================= */
-		let dragging = false
-		let startX, startY
-
-		map.addEventListener("mousedown", e => {
-			dragging = true
-			map.style.cursor = "grabbing"
-			startX = e.clientX - x
-			startY = e.clientY - y
-		})
-
-		window.addEventListener("mousemove", e => {
-			if (!dragging) return
-			x = e.clientX - startX
-			y = e.clientY - startY
-			applyTransform()
-		})
-
-		window.addEventListener("mouseup", () => {
-			dragging = false
-			map.style.cursor = "grab"
-		})
-
-		/* ================= ZOOM (WHEEL) ================= */
-		wrapper.addEventListener("wheel", e => {
-			e.preventDefault()
-			const rect = wrapper.getBoundingClientRect()
-			const mx = e.clientX - rect.left
-			const my = e.clientY - rect.top
-
-			const factor = e.deltaY < 0 ? 1.1 : 0.9
-			const MIN_SCALE = 0.6
-			const MAX_SCALE = 4
-
-			const newScale = Math.min(Math.max(MIN_SCALE, scale * factor), MAX_SCALE)
-
-
-			x = mx - ((mx - x) * newScale) / scale
-			y = my - ((my - y) * newScale) / scale
-			scale = newScale
-
-			applyTransform()
-		}, { passive: false })
-
-		/* ================= ZOOM BUTTONS ================= */
-		function zoomAtCenter(factor) {
-			const rect = wrapper.getBoundingClientRect()
-			const cx = rect.width / 2
-			const cy = rect.height / 2
-
-			const newScale = Math.min(Math.max(1, scale * factor), 4)
-
-			x = cx - ((cx - x) * newScale) / scale
-			y = cy - ((cy - y) * newScale) / scale
-			scale = newScale
-
-			applyTransform()
-		}
-
-		document.getElementById("zoomIn").onclick = () => zoomAtCenter(1.2)
-		document.getElementById("zoomOut").onclick = () => zoomAtCenter(0.8)
-
-		/* ================= RESET ================= */
-		document.getElementById("resetView").onclick = () => {
-			scale = 1
-			x = 0
-			y = 0
-			applyTransform()
-		};
-	</script>
+  <script src='/js/feed-content.js'></script>
 
 </body>
 

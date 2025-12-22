@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Mangistau Parks Map</title>
+
+	<style>
+		html,
+		body {
+			margin: 0;
+			height: 100%;
+			overflow: hidden;
+			font-family: Arial, sans-serif;
+		}
+
+		body {
+			display: flex;
+		}
+
+		/* Sidebar */
+		.sidebar {
+			width: 300px;
+			background: #f4f4f4;
+			padding: 20px;
+			box-sizing: border-box;
+			overflow-y: auto;
+		}
+
+		.sidebar h2 {
+			margin-top: 0;
+		}
+
+		.park-item {
+			padding: 10px;
+			cursor: pointer;
+			border-bottom: 1px solid #ddd;
+		}
+
+		.park-item:hover {
+			background: #e6e6e6;
+		}
+
+		.park-item.active {
+			background: #cfe4ff;
+			font-weight: bold;
+		}
+
+		.explore-btn {
+			margin-top: 20px;
+			width: 100%;
+			padding: 12px;
+			font-size: 16px;
+			background: #000;
+			color: white;
+			border: none;
+			cursor: pointer;
+			opacity: 0.5;
+		}
+
+		.explore-btn.enabled {
+			opacity: 1;
+		}
+
+		/* Map */
+		.map-wrapper {
+			flex: 1;
+			background: black;
+			position: relative;
+			overflow: hidden;
+			background-color: white;
+		}
+
+		.map {
+			position: absolute;
+			inset: 0;
+			width: max(100vw, 100vh);
+			height: max(100vw, 100vh);
+			aspect-ratio: 1 / 1;
+			transform-origin: 0 0;
+			cursor: grab;
+		}
+
+		.map img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			pointer-events: none;
+			user-select: none;
+		}
+
+		/* Markers */
+		.marker {
+			position: absolute;
+			width: 14px;
+			height: 14px;
+			border-radius: 50%;
+			transform: translate(-50%, -50%);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: white;
+			font-size: 10px;
+		}
+
+		.marker.blue {
+			background: blue;
+		}
+
+		.marker.red {
+			background: red;
+		}
+
+		/* Zoom controls */
+		.zoom-controls {
+			position: absolute;
+			right: 20px;
+			bottom: 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			z-index: 10;
+		}
+
+		.zoom-controls button {
+			width: 42px;
+			height: 42px;
+			font-size: 20px;
+			font-weight: bold;
+			background: white;
+			border: 1px solid #ccc;
+			cursor: pointer;
+			border-radius: 6px;
+		}
+
+		.zoom-controls button:hover {
+			background: #f0f0f0;
+		}
+
+		header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 64px;
+			z-index: 1000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		nav {
+			display: flex;
+			gap: 32px;
+		}
+
+		nav a {
+			color: #000;
+			text-decoration: none;
+			font-size: 15px;
+			font-weight: 600;
+			opacity: 0.9;
+			transition: opacity 0.2s ease;
+		}
+
+		nav a:hover {
+			opacity: 1;
+		}
+		
+		.selected {
+			border-bottom: solid 1px black;
+		}
+	</style>
+</head>
+
+<body>
+
+	<header>
+		<nav>
+			<a href="index.html">Дома</a>
+			<a href="map.html" class='selected'>Карта</a>
+			<a href="about.html">Про Мангистау</a>
+		</nav>
+	</header>
+
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<h2>Интересные локаций</h2>
+		<div id="parkList"></div>
+		<button id="exploreBtn" class="explore-btn" disabled>Осматривать</button>
+	</div>
+
+	<!-- Map -->
+	<div class="map-wrapper" id="mapWrapper">
+		<div class="map" id="map">
+			<img src="/public/mangistau-map.jpeg" alt="Mangistau Map">
+			<div id="markers"></div>
+		</div>
+
+		<div class="zoom-controls">
+			<button id="zoomIn">+</button>
+			<button id="zoomOut">−</button>
+			<button id="resetView" title="Reset view">⟳</button>
+		</div>
+	</div>
+
+	<script>
+		/* ================= DATA ================= */
+		const mapPoints = [
+			{
+				name: "Bozhyra (Boszhira)",
+				x: 50,
+				y: 50,
+				link: "https://maps.app.goo.gl/vK8ayGY1HAe3dr7x8"
+			},
+			{
+				name: "Tuzbair Salt Flat",
+				x: 40,
+				y: 44,
+				link: "https://maps.app.goo.gl/gEnghG44DjZy5VLV6"
+			},
+			{
+				name: "Airakty Zhygylan",
+				x: 30,
+				y: 40,
+				link: "https://maps.app.goo.gl/HFBT2jpUkMqz45Fg7"
+			},
+			{
+				name: "Karakiya Depression",
+				x: 30,
+				y: 63,
+				link: "https://maps.app.goo.gl/755FmBsDUGXpvta88"
+			},
+			{
+				name: "Sherkala Mountain",
+				x: 29,
+				y: 43,
+				link: "https://maps.app.goo.gl/aFaa1xhpM76TA6V28"
+			},
+			{
+				name: "Otpan Tau",
+				x: 32,
+				y: 43,
+				link: "https://maps.app.goo.gl/p3hM9VnxQPNgRJvz6"
+			},
+			{
+				name: "Karamsay Canyon",
+				x: 30,
+				y: 30,
+				link: "https://maps.app.goo.gl/8r11Qmsqe3CoB7wV8"
+			},
+			{
+				name: "Torysh – Valley of Balls",
+				x: 23,
+				y: 41,
+				link: "https://maps.app.goo.gl/V64ZhgEakmYtRBe69"
+			}
+		]
+
+
+		/* ================= ELEMENTS ================= */
+		const parkList = document.getElementById("parkList")
+		const markersContainer = document.getElementById("markers")
+		const exploreBtn = document.getElementById("exploreBtn")
+		const map = document.getElementById("map")
+		const wrapper = document.getElementById("mapWrapper")
+
+		/* ================= STATE ================= */
+		let selectedPark = null
+		let scale = 0.6
+		let x = 0
+		let y = 0
+
+		/* ================= HELPERS ================= */
+		function clampPosition() {
+			const w = wrapper.getBoundingClientRect()
+			const mapW = map.offsetWidth * scale
+			const mapH = map.offsetHeight * scale
+
+			const minX = Math.min(0, w.width - mapW)
+			const minY = Math.min(0, w.height - mapH)
+
+			x = Math.max(minX, Math.min(0, x))
+			y = Math.max(minY, Math.min(0, y))
+		}
+
+		function applyTransform() {
+			clampPosition()
+			map.style.transform = `translate(${x}px, ${y}px) scale(${scale})`
+		}
+
+		/* ================= PARK SELECTION ================= */
+		function selectPark(park) {
+			selectedPark = park
+
+			document.querySelectorAll(".park-item").forEach(item =>
+				item.classList.toggle("active", item.dataset.name === park.name)
+			)
+
+			// Highlight all markers with the same coordinates as the selected park
+			document.querySelectorAll(".marker").forEach(marker => {
+				if (marker.dataset.coord === `${park.x}-${park.y}` && marker.dataset.name === park.name) {
+					marker.classList.remove("blue")
+					marker.classList.add("red")
+				} else {
+					marker.classList.remove("red")
+					marker.classList.add("blue")
+				}
+			})
+
+			exploreBtn.disabled = false
+			exploreBtn.classList.add("enabled")
+		}
+
+		/* ================= CREATE UI ================= */
+		// Count duplicates to offset overlapping markers
+		const coordCounts = {}
+
+		mapPoints.forEach((park, index) => {
+			const key = `${park.x}-${park.y}`
+			if (!coordCounts[key]) coordCounts[key] = 0
+			const offsetIndex = coordCounts[key]++
+
+			// Sidebar
+			const item = document.createElement("div")
+			item.className = "park-item"
+			item.textContent = park.name
+			item.dataset.name = park.name
+			item.onclick = () => selectPark(park)
+			parkList.appendChild(item)
+
+			// Marker
+			const marker = document.createElement("div")
+			marker.className = "marker blue"
+			marker.dataset.name = park.name
+			marker.dataset.coord = key
+
+			// Slight offset for overlapping markers
+			const offset = offsetIndex * 18 // 18px spacing
+			marker.style.left = `calc(${park.x}% + ${offset}px)`
+			marker.style.top = `calc(${park.y}% + ${offset}px)`
+
+			marker.onclick = () => selectPark(park)
+			markersContainer.appendChild(marker)
+		})
+
+		/* ================= NAVIGATION ================= */
+		exploreBtn.onclick = () => {
+			if (!selectedPark) return
+			location.href = selectedPark.link
+		}
+
+		/* ================= PAN ================= */
+		let dragging = false
+		let startX, startY
+
+		map.addEventListener("mousedown", e => {
+			dragging = true
+			map.style.cursor = "grabbing"
+			startX = e.clientX - x
+			startY = e.clientY - y
+		})
+
+		window.addEventListener("mousemove", e => {
+			if (!dragging) return
+			x = e.clientX - startX
+			y = e.clientY - startY
+			applyTransform()
+		})
+
+		window.addEventListener("mouseup", () => {
+			dragging = false
+			map.style.cursor = "grab"
+		})
+
+		/* ================= ZOOM (WHEEL) ================= */
+		wrapper.addEventListener("wheel", e => {
+			e.preventDefault()
+			const rect = wrapper.getBoundingClientRect()
+			const mx = e.clientX - rect.left
+			const my = e.clientY - rect.top
+
+			const factor = e.deltaY < 0 ? 1.1 : 0.9
+			const MIN_SCALE = 0.6
+			const MAX_SCALE = 4
+
+			const newScale = Math.min(Math.max(MIN_SCALE, scale * factor), MAX_SCALE)
+
+
+			x = mx - ((mx - x) * newScale) / scale
+			y = my - ((my - y) * newScale) / scale
+			scale = newScale
+
+			applyTransform()
+		}, { passive: false })
+
+		/* ================= ZOOM BUTTONS ================= */
+		function zoomAtCenter(factor) {
+			const rect = wrapper.getBoundingClientRect()
+			const cx = rect.width / 2
+			const cy = rect.height / 2
+
+			const newScale = Math.min(Math.max(1, scale * factor), 4)
+
+			x = cx - ((cx - x) * newScale) / scale
+			y = cy - ((cy - y) * newScale) / scale
+			scale = newScale
+
+			applyTransform()
+		}
+
+		document.getElementById("zoomIn").onclick = () => zoomAtCenter(1.2)
+		document.getElementById("zoomOut").onclick = () => zoomAtCenter(0.8)
+
+		/* ================= RESET ================= */
+		document.getElementById("resetView").onclick = () => {
+			scale = 0.6
+			x = 0
+			y = 0
+			applyTransform()
+		}
+
+		applyTransform()
+	</script>
+
+</body>
+
+</html>
