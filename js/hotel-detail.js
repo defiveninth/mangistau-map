@@ -1355,7 +1355,7 @@ function renderHotelDetail() {
               ${hotel.gallery
         .map(
           (img) => `
-                <img src="/mangistau-map``${img}" alt="Hotel gallery" class="gallery-image" />
+                <img src="/mangistau-map${img}" alt="Hotel gallery" class="gallery-image"/>
               `,
         )
         .join("")}
