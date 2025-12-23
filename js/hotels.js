@@ -631,7 +631,7 @@ function renderHotels() {
 
     card.innerHTML = `
       <img 
-        src="${hotel.image || "/grand-hotel-exterior.png"}" 
+        src="/mangytau-map${hotel.image || "/grand-hotel-exterior.png"}" 
         alt="${hotel.title}"
         class="hotel-image"
       />
