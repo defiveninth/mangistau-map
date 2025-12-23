@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Саяхат гиді – Маңғыстау Explorer</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles/about-page.css">
 	
 	<style>
 		* {
@@ -272,6 +273,22 @@
 			box-shadow: 0 12px 32px rgba(255, 255, 255, 0.3);
 		}
 
+		/* Guides section */
+		.guides-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 24px;
+			margin-bottom: 60px;
+		}
+
+		/* Tour Operators section */
+		.operators-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 24px;
+			margin-bottom: 60px;
+		}
+
 		/* Mobile responsive */
 		@media (max-width: 768px) {
 			.hero {
@@ -309,7 +326,6 @@
 			<a href="index.html">Ашу</a>
 			<a href="map.html">Маңғыстау</a>
 			<a href="aktau.html">Ақтау</a>
-			<a href="hotels.html">Қонақүйлер</a>
 			<a href="about.html" class='selected'>Гид</a>
 		</nav>
 	</header>
@@ -342,6 +358,18 @@
 				<p class="card-text">Маңғыстау – үнсіздік пен ой толғау орны. Адамдар бұл жерге ойын-сауық үшін емес, кеңістік пен ішкі тыныштық сезімі үшін келеді. Бұл жан үшін бағыт.</p>
 			</div>
 		</div>
+
+		<!-- Guides Section -->
+		<h2 class="section-title">Гидтер</h2>
+		<p class="section-subtitle">Біздің тәжірибелі гидтердің біреуімен Маңғыстауды зерттеңіз</p>
+		
+		<div id="guides-grid" class="guides-grid"></div>
+
+		<!-- Tour Operators Section -->
+		<h2 class="section-title" style="margin-top: 80px;">Тур операторлары</h2>
+		<p class="section-subtitle">Сенімді тур операторларымыз сіздің саяхатыңызды жоспарлауға көмектеседі</p>
+		
+		<div id="operators-grid" class="operators-grid"></div>
 
 		<!-- Travel Tips -->
 		<h2 class="section-title">Маңызды саяхат кеңестері</h2>
@@ -397,6 +425,7 @@
 		</div>
 	</div>
 
+	<script src="js/about-page.js"></script>
 </body>
 
 </html>
