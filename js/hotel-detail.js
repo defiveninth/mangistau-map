@@ -1319,7 +1319,7 @@ function renderHotelDetail() {
 
   detailContainer.innerHTML = `
     <img 
-      src="${hotel.image}" 
+      src="/mangistau-map${hotel.image}" 
       alt="${hotel.title}"
       class="hotel-hero-image"
     />
