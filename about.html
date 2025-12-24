@@ -289,6 +289,67 @@
 			margin-bottom: 60px;
 		}
 
+		/* Tab navigation styles */
+		.tabs-container {
+			display: flex;
+			justify-content: center;
+			gap: 16px;
+			margin-bottom: 48px;
+			padding: 8px;
+			background: white;
+			border-radius: 16px;
+			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+			max-width: 500px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.tab-button {
+			flex: 1;
+			padding: 16px 32px;
+			background: transparent;
+			border: none;
+			border-radius: 12px;
+			font-family: 'Inter', sans-serif;
+			font-size: 16px;
+			font-weight: 600;
+			color: var(--stone);
+			cursor: pointer;
+			transition: all 0.3s ease;
+			position: relative;
+		}
+
+		.tab-button:hover {
+			background: rgba(193, 154, 107, 0.1);
+			color: var(--text-dark);
+		}
+
+		.tab-button.active {
+			background: linear-gradient(135deg, var(--desert) 0%, var(--sand) 100%);
+			color: var(--text-dark);
+			box-shadow: 0 4px 12px rgba(193, 154, 107, 0.3);
+		}
+
+		.tab-content {
+			display: none;
+		}
+
+		.tab-content.active {
+			display: block;
+			animation: fadeIn 0.4s ease;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
 		/* Mobile responsive */
 		@media (max-width: 768px) {
 			.hero {
@@ -312,6 +373,17 @@
 			}
 
 			nav a {
+				font-size: 14px;
+			}
+
+			/* Mobile tabs styling */
+			.tabs-container {
+				max-width: 100%;
+				gap: 8px;
+			}
+
+			.tab-button {
+				padding: 14px 24px;
 				font-size: 14px;
 			}
 		}
@@ -360,20 +432,30 @@
 			</div>
 		</div>
 
-		<!-- Guides Section -->
-		<h2 class="section-title">Гидтер</h2>
-		<p class="section-subtitle">Біздің тәжірибелі гидтердің біреуімен Маңғыстауды зерттеңіз</p>
-		
-		<div id="guides-grid" class="guides-grid"></div>
+		<!-- Added tab navigation -->
+		<div class="tabs-container">
+			<button class="tab-button active" data-tab="guides">Гидтер</button>
+			<button class="tab-button" data-tab="operators">Тур операторлары</button>
+		</div>
 
-		<!-- Tour Operators Section -->
-		<h2 class="section-title" style="margin-top: 80px;">Тур операторлары</h2>
-		<p class="section-subtitle">Сенімді тур операторларымыз сіздің саяхатыңызды жоспарлауға көмектеседі</p>
-		
-		<div id="operators-grid" class="operators-grid"></div>
+		<!-- Guides tab content -->
+		<div id="guides-tab" class="tab-content active">
+			<h2 class="section-title">Гидтер</h2>
+			<p class="section-subtitle">Біздің тәжірибелі гидтердің біреуімен Маңғыстауды зерттеңіз</p>
+			
+			<div id="guides-grid" class="guides-grid"></div>
+		</div>
+
+		<!-- Tour Operators tab content -->
+		<div id="operators-tab" class="tab-content">
+			<h2 class="section-title">Тур операторлары</h2>
+			<p class="section-subtitle">Сенімді тур операторларымыз сіздің саяхатыңызды жоспарлауға көмектеседі</p>
+			
+			<div id="operators-grid" class="operators-grid"></div>
+		</div>
 
 		<!-- Travel Tips -->
-		<h2 class="section-title">Маңызды саяхат кеңестері</h2>
+		<h2 class="section-title" style="margin-top: 80px;">Маңызды саяхат кеңестері</h2>
 		<p class="section-subtitle">Осы практикалық түсініктермен Маңғыстау саяхатыңыздан максимум пайда алыңыз</p>
 
 		<div class="tips-section">

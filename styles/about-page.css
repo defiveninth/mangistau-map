@@ -9,11 +9,17 @@
 .guide-card {
   background: white;
   border-radius: 20px;
-  overflow: hidden;
+  /* Removed overflow hidden to allow circular image to display properly */
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
+  /* Added padding and centered layout for circular avatar design */
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .guide-card::before {
@@ -28,6 +34,7 @@
   transition: opacity 0.35s ease;
   pointer-events: none;
   z-index: 1;
+  border-radius: 20px;
 }
 
 .guide-card:hover::before {
@@ -39,23 +46,31 @@
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
 
+/* Made guide image circular and smaller */
 .guide-image {
-  width: 100%;
-  height: 280px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   object-fit: cover;
   background: linear-gradient(135deg, #c19a6b 0%, #e8d5c4 100%);
   transition: transform 0.35s ease;
+  border: 4px solid rgba(193, 154, 107, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  margin-bottom: 20px;
 }
 
 .guide-card:hover .guide-image {
   transform: scale(1.08);
+  border-color: rgba(193, 154, 107, 0.4);
 }
 
 .guide-info {
-  padding: 24px;
+  /* Removed padding and background since card now handles spacing */
   position: relative;
   z-index: 2;
-  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .guide-name {
@@ -248,14 +263,13 @@
     gap: 20px;
   }
 
+  /* Updated mobile styles for circular avatar */
   .guide-image {
-    height: 220px;
+    width: 100px;
+    height: 100px;
   }
 
-  .guide-info {
-    padding: 20px;
-  }
-
+  /* Removed guide-info padding override */
   .guide-name {
     font-size: 15px;
   }
@@ -286,14 +300,13 @@
     gap: 16px;
   }
 
+  /* Smaller circular avatars on mobile */
   .guide-image {
-    height: 200px;
+    width: 90px;
+    height: 90px;
   }
 
-  .guide-info {
-    padding: 16px;
-  }
-
+  /* Removed guide-info padding override */
   .operator-card {
     padding: 24px;
   }
